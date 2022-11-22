@@ -5,11 +5,10 @@ import { CgProfile } from "react-icons/cg";
 import styled from 'styled-components';
 
 export default function Navbar({navbarBackground}) {
-  const [{ userInfo }, dispatch] = useStateProvider();
+  const [{ userInfo }] = useStateProvider();
   //console.log("userInfo", userInfo)
 
 
-  console.log("nav", navbarBackground)
   return (
     <Container navbarBackground={navbarBackground}>
       <div className="search__bar">
