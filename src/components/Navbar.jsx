@@ -4,11 +4,14 @@ import { FaSearch } from "react-icons/fa";
 import { CgProfile } from "react-icons/cg";
 import styled from 'styled-components';
 
-export default function Navbar() {
+export default function Navbar({navbarBackground}) {
   const [{ userInfo }, dispatch] = useStateProvider();
   //console.log("userInfo", userInfo)
+
+
+  console.log("nav", navbarBackground)
   return (
-    <Container>
+    <Container navbarBackground={navbarBackground}>
       <div className="search__bar">
         <FaSearch />
         <input type="text" placeholder="What do you want to listen to?" />
@@ -29,7 +32,7 @@ height: 15vh;
 padding: 2rem;
 top: 0;
 transition: .3s ease-in-out;
-background-color: none;
+background-color: ${({navbarBackground}) => navbarBackground? "rgba(0,0,0,0.7)": "none"};
 position: sticky;
 .search__bar{
   background-color: white;

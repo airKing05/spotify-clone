@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useEffect } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import styled from 'styled-components';
 import { reducerCases } from '../utilities/Constants';
 import { useStateProvider } from '../utilities/StateProvider';
@@ -10,6 +10,10 @@ import Sidebar from './Sidebar';
 
 export default function Spotify() {
     const [{token}, dispatch] = useStateProvider();
+    const bodyRef = useRef();
+    const [navbarBackground, setNavbarBackground] = useState(false);
+    const [headerBackground, setHeaderBackground] = useState(false);
+
 
     const headerData = {
         Authorization: "Bearer " + token,
@@ -24,21 +28,27 @@ export default function Spotify() {
             userName: res.data.display_name,
             userId: res.data.id
         }
-        console.log("res", res)
-       dispatch({type: reducerCases.SET_USER, userInfo})
-    }
+        //console.log("res", res)
+       dispatch({type: reducerCases.SET_USER, userInfo});
+    };
 
     useEffect(()=>{
         getUserInfo();
-    }, [token, dispatch])
+    }, [token, dispatch]);
+
+    function bodyScroll(){
+        bodyRef.current.scrollTop>=30 ? setNavbarBackground(true): setNavbarBackground(false);
+        bodyRef.current.scrollTop>= 265 ? setHeaderBackground(true) : setHeaderBackground(false);
+    }
+    //console.log("spotify", navbarBackground, headerBackground)
     return (
         <Container>
             <div className="spotify__body">
                 <Sidebar />
-                <div className="body">
-                    <Navbar />
+                <div className="body" ref={bodyRef} onScroll={bodyScroll}>
+                    <Navbar navbarBackground = {navbarBackground} />
                     <div className="body__contents">
-                        <MainBody />
+                        <MainBody headerBackground={headerBackground}/>
                     </div>
                 </div>
             </div>
@@ -70,6 +80,12 @@ grid-template-rows: 85vh 15vh;
 .body{
      widht: 100%;
     height: 100%;
-    overflow: auto
+    overflow: auto;
+     &::-webkit-scrollbar{
+    width: 0.7rem;
+    &-thumb {
+      background-color: rgba(255, 255, 255, 0.6);
+    }
+   }
 }
 `
