@@ -6,24 +6,24 @@ import styled from 'styled-components';
 
 export default function Playlist() {
   const [{ token, playlists }, dispatch] = useStateProvider();
-  console.log("token", token)
-  const data = {
+  
+  const headerData = {
     Authorization: "Bearer " + token,
     "Content-Type": "application/json",
   }
 
+  const getUserPlaylist = async () => {
+    let res = await axios.get('https://api.spotify.com/v1/me/playlists', {
+      headers: headerData
+    });
+    const { items } = res.data;
+    const playlists = items.map(({ name, id }) => {
+      return { name, id }
+    })
+    //console.log("items", playlists)
+    dispatch({ type: reducerCases.SET_PLAYLISTS, playlists })
+  }
   useEffect(() => {
-    const getUserPlaylist = async () => {
-      let res = await axios.get('https://api.spotify.com/v1/me/playlists', {
-        headers: data
-      });
-      const { items } = res.data;
-      const playlists = items.map(({ name, id }) => {
-        return { name, id }
-      })
-      //console.log("items", playlists)
-      dispatch({ type: reducerCases.SET_PLAYLISTS, playlists })
-    }
     getUserPlaylist();
   }, [token, dispatch]);
   return (
