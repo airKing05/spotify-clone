@@ -5,7 +5,7 @@ import { reducerCases } from "../utilities/Constants";
 import styled from 'styled-components';
 
 export default function Playlist() {
-  const [{ token, playlists }, dispatch] = useStateProvider();
+  const [{ token, playlists, selectedPlaylistId }, dispatch] = useStateProvider();
   
   const headerData = {
     Authorization: "Bearer " + token,
@@ -27,13 +27,18 @@ export default function Playlist() {
   useEffect(() => {
     getUserPlaylist();
   }, [token, dispatch]);
+
+  const changeCurrentPlaylist = (selectedPlaylistId) =>{
+    console.log("sleecffdsd", selectedPlaylistId)
+    dispatch({ type: reducerCases.SET_CURRENT_PLYALIST_ID, selectedPlaylistId })
+  }
   return (
     <Contianer>
       <ul>
         {
           playlists.map((item) => {
             return (
-              <li key={item.id}>{item.name}</li>
+              <li key={item.id} onClick={()=> changeCurrentPlaylist(item.id)}>{item.name}</li>
             )
           })
         }
