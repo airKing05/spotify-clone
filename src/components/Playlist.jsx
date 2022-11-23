@@ -29,7 +29,7 @@ export default function Playlist() {
   }, [token, dispatch]);
 
   const changeCurrentPlaylist = (selectedPlaylistId) =>{
-    console.log("sleecffdsd", selectedPlaylistId)
+    //console.log("sleecffdsd", selectedPlaylistId)
     dispatch({ type: reducerCases.SET_CURRENT_PLYALIST_ID, selectedPlaylistId })
   }
   return (

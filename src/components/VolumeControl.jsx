@@ -21,12 +21,14 @@ export default function VolumeControl() {
         header: headerData
       }
       );
+
+      console.log(e)
     };
   return (
     <Container>
 
         {/* <BsVolumeDown/>  */}
-        <input type="range" min={0} max={100} onMouseUp = {(e) => changeVolume(e)} />
+        <input type="range" min={0} max={100} value={30} onMouseUp={(e) => changeVolume(e)} />
     </Container>
   )
 }

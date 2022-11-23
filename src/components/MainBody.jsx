@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { reducerCases } from '../utilities/Constants';
 import { useStateProvider } from '../utilities/StateProvider';
 
-export default function MainBody({headerBackground}) {
+export default function MainBody({ headerBackground }) {
   const [{ token, selectedPlaylistId, selectedPlaylist }, dispatch] = useStateProvider();
 
   const headerData = {
@@ -48,7 +48,7 @@ export default function MainBody({headerBackground}) {
   }, [token, selectedPlaylistId, dispatch]);
 
   // conver milliseconds to  minutes and second
-  function msToMinSec(ms){
+  function msToMinSec(ms) {
     let min = ms / 1000 / 60;
     let remainder = min % 1;
     let sec = Math.floor(remainder * 60);
@@ -56,12 +56,38 @@ export default function MainBody({headerBackground}) {
       sec = '0' + sec;
     }
     min = Math.floor(min);
-      // const min = Math.floor(ms/60000);
-      // const sec = ((ms%6000)/1000).toFixed(0);
-  
-      return `${min}:${sec}`;
+    // const min = Math.floor(ms/60000);
+    // const sec = ((ms%6000)/1000).toFixed(0);
+
+    return `${min}:${sec}`;
   }
   //console.log("selected play list from reducer", selectedPlaylist.playlistTracks)
+
+  // change the tack based on the "SELECTED TREACK FROM CURRENT PLAYLIST"
+  const changeCurrentTrackPlay = async (item) => {
+   
+    const { trackId, trackName, trackImage, trackArtics, trackContex_uri, trackNumber } = item;
+
+    const res = await axios.put('https://api.spotify.com/v1/me/player/play', {
+      "context_uri": trackContex_uri,
+      "offset": {
+        "position": trackName - 1,
+      },
+      "position_ms": 0
+    }, {
+      headers: headerData
+    });
+    if (res.status === 204) {
+      const currentlyPlaying = {
+        trackId, trackName, trackImage, trackArtics
+      };
+      dispatch({ type: reducerCases.SET_CURRENTLY_PLAYING, currentlyPlaying });
+      dispatch({ type: reducerCases.SET_PLAYER_STATE, playerState: true });
+     
+    } else {
+      dispatch({ type: reducerCases.SET_PLAYER_STATE, playerState: true });
+    }
+  }
   return (
     <Container headerBackground={headerBackground}>
       {
@@ -97,7 +123,7 @@ export default function MainBody({headerBackground}) {
                   selectedPlaylist && selectedPlaylist.playlistTracks.map((item, index) => {
                     //console.log("insield the map", item.trackId)
                     return (
-                      <div className="row" key={item.trackId}>
+                      <div className="row" key={item.trackId} onClick={() => changeCurrentTrackPlay(item)}>
                         <div className="col">
                           <span>{index + 1}</span>
                         </div>
@@ -165,7 +191,7 @@ const Container = styled.div`
       top: 15vh;
       padding: 1rem 3rem;
       transition: .3s ease-in-out;
-      background-color: ${({headerBackground}) => headerBackground? "#000000dc": "none"}
+      background-color: ${({ headerBackground }) => headerBackground ? "#000000dc" : "none"}
     }
     .tracks{
       margin : 0 2rem;

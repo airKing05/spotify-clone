@@ -6,6 +6,7 @@ import {useStateProvider} from '../utilities/StateProvider';
 
 export default function CurrentTrack() {
   const [{ token, currentlyPlaying }, dispatch] = useStateProvider();
+  //console.log(currentlyPlaying, "jsdjv")
    
   //console.log("currentlyPlaying----", currentlyPlaying)
     const headerData = {

@@ -16,6 +16,7 @@ export default function PlayerControl() {
         "Content-Type": "application/json",
     };
 
+    // change the track based on the "NEXT" and "PREVIOUS" click
     const changeTrack = async (type) =>{
         // changing the track
       const respose =  await axios.post(`https://api.spotify.com/v1/me/player/${type}`, {}, {
@@ -41,6 +42,7 @@ export default function PlayerControl() {
         }
     };
 
+    // change the state of current track based on the "PLAY" and "PAUSE" state 
     const changePlayerState = async() => {
         const currentState = playerState ? "pause" : "play";
         const res = await axios.put(`https://api.spotify.com/v1/me/player/${currentState}`, {}, {
